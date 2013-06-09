@@ -24,8 +24,10 @@ void setup()
   cell_w = width/cols;
   cell_h = boardHeight/rows;
   
-  rBtns = new RadioButton[1];
+  rBtns = new RadioButton[3];
   rBtns[0] = new RadioButton("Glider");
+  rBtns[1] = new RadioButton("Beacon");
+  rBtns[2] = new RadioButton("Toad");
   loadButtons(rBtns);
   initConwaysGameOfLife(color(255,255,255), color(0), 10);  
 }
@@ -186,6 +188,7 @@ void mouseClicked()
       {
         if(rBtns[i].isInButton(mouseX, mouseY))
         {
+          println("Clicked " + rBtns[i].text);
           rBtns[i].checked = !rBtns[i].checked;
           if(rBtns[i].checked)
             selected = rBtns[i].text;
@@ -193,8 +196,12 @@ void mouseClicked()
             selected = "";
           for(int j =0; j < rBtns.length; j++)
           {
-            if(rBtns[j] != rBtns[i])
+            if(j != i)
+            {
+              println("Un-checking " + rBtns[j].text);
               rBtns[j].checked = false;
+              rBtns[j].display();
+            }
           }
         }
         rBtns[i].display();
@@ -233,7 +240,10 @@ void mouseClicked()
         
         if(selected.equals("Glider"))
           org = Glider(xCellOver, yCellOver);
-       
+        else if(selected.equals("Beacon"))
+          org = Beacon(xCellOver, yCellOver);
+        else if(selected.equals("Toad"))
+          org = Toad(xCellOver, yCellOver);       
        
        if(org.xMin < 0 || org.xMax >= cols || org.yMin < 0 || org.yMax >= rows)
        {
@@ -299,6 +309,45 @@ Organism Glider(int x, int y)
   glider.yMin = y-1;
   glider.yMax = y+1;
   return glider;
+}
+
+Organism Beacon(int x, int y)
+{
+  Organism beacon = new Organism(x,y);
+  beacon.cells.add(new Cell(x, y, cell_w, cell_h, alive));
+  beacon.cells.add(new Cell(x+1, y, cell_w, cell_h, alive));
+  beacon.cells.add(new Cell(x, y+1, cell_w, cell_h, alive));
+  beacon.cells.add(new Cell(x+1, y+1, cell_w, cell_h, alive));
+  
+  beacon.cells.add(new Cell(x+2, y+2, cell_w, cell_h, alive));
+  beacon.cells.add(new Cell(x+2, y+3, cell_w, cell_h, alive));
+  beacon.cells.add(new Cell(x+3, y+2, cell_w, cell_h, alive));
+  beacon.cells.add(new Cell(x+3, y+3, cell_w, cell_h, alive));
+  
+  beacon.xMin = x;
+  beacon.xMax = x+3;
+  beacon.yMin = y;
+  beacon.yMax = y+3;
+  return beacon;
+}
+
+Organism Toad(int x, int y)
+{
+  Organism toad = new Organism(x,y);
+  toad.cells.add(new Cell(x, y, cell_w, cell_h, alive));
+  toad.cells.add(new Cell(x+1, y, cell_w, cell_h, alive));
+  toad.cells.add(new Cell(x+2, y, cell_w, cell_h, alive));
+    
+  toad.cells.add(new Cell(x-1, y+1, cell_w, cell_h, alive));
+  toad.cells.add(new Cell(x, y+1, cell_w, cell_h, alive));
+  toad.cells.add(new Cell(x+1, y+1, cell_w, cell_h, alive));
+  
+  
+  toad.xMin = x-1;
+  toad.xMax = x+2;
+  toad.yMin = y;
+  toad.yMax = y+1;
+  return toad;
 }
 
 void Error(int x, int y, String msg)
