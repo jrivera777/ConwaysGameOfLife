@@ -2,7 +2,8 @@ class Organism
 {
   int x, y;
   ArrayList<Cell> cells;
-  
+  int xMax, yMax;
+  int xMin, yMin;
   Organism()
   {
     this(-1, -1);

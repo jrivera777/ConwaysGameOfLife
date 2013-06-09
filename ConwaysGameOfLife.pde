@@ -32,7 +32,6 @@ void setup()
 
 void draw()
 {
-
   for (int i = 0; i < cols; i++ ) 
   {     
     for (int j = 0; j < rows; j++ ) 
@@ -48,9 +47,10 @@ void draw()
     {
       applyRules();
       lastTime = millis();
-      
+      loadButtons(rBtns);       
     }
-  } 
+  }
+
 }
 
 void initConwaysGameOfLife(color d, color a, int chance)
@@ -177,6 +177,7 @@ void keyPressed()
 
 void mouseClicked()
 {
+  loadButtons(rBtns); 
   if(paused)
   {
     if(mouseY > boardHeight)
@@ -224,6 +225,7 @@ void mouseClicked()
       }
       else
       {
+        
         Organism org = null;
         buffer[xCellOver][yCellOver] = 0;
         grid[xCellOver][yCellOver].col = dead;
@@ -231,6 +233,13 @@ void mouseClicked()
         
         if(selected.equals("Glider"))
           org = Glider(xCellOver, yCellOver);
+       
+       
+       if(org.xMin < 0 || org.xMax >= cols || org.yMin < 0 || org.yMax >= rows)
+       {
+         Error(buttonAreaWidth/2, buttonAreaHeight / 2 + boardHeight, "Cannot create organism inbounds.");
+         return;
+       } 
        
         for(int i = 0; i < org.cells.size(); i++)
         {
@@ -258,7 +267,9 @@ void loadButtons(RadioButton[] btns)
 {
   int currX = RadioButton.size;
   int currY = boardHeight + 20;
-  
+  fill(50);
+  rect(0, boardHeight, boardWidth, buttonAreaHeight);
+ 
   for(int i = 0; i < btns.length; i++)
   {
     if(currY > height)
@@ -282,5 +293,16 @@ Organism Glider(int x, int y)
   glider.cells.add(new Cell(x+2, y+1, cell_w, cell_h, alive));
   glider.cells.add(new Cell(x+2, y-1, cell_w, cell_h, alive));
   glider.cells.add(new Cell(x+2, y, cell_w, cell_h, alive));
+  
+  glider.xMin = x;
+  glider.xMax = x+2;
+  glider.yMin = y-1;
+  glider.yMax = y+1;
   return glider;
+}
+
+void Error(int x, int y, String msg)
+{
+  fill(255, 0, 0);
+  text(msg, x, y);
 }
