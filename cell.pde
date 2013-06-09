@@ -1,10 +1,10 @@
 class Cell 
 {
-  float x,y;   
-  float w,h;   
+  int x,y;   
+  int w,h;   
   color col;     
   
-  Cell(float tempX, float tempY, float tempW, float tempH, color tempC) 
+  Cell(int tempX, int tempY, int tempW, int tempH, color tempC) 
   {
     x = tempX;
     y = tempY;

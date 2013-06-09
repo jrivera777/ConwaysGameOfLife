@@ -1,5 +1,6 @@
 Cell[][] grid;
 int[][] buffer;
+RadioButton[] rBtns;
 int rows, cols;
 int cell_w, cell_h;
 color dead, alive;
@@ -7,6 +8,7 @@ int boardHeight, boardWidth;
 int buttonAreaHeight, buttonAreaWidth;
 int interval, lastTime;
 boolean paused;
+String selected="";
 void setup()
 {
   size(500, 700);
@@ -21,6 +23,10 @@ void setup()
   cols = 50;
   cell_w = width/cols;
   cell_h = boardHeight/rows;
+  
+  rBtns = new RadioButton[1];
+  rBtns[0] = new RadioButton("Glider");
+  loadButtons(rBtns);
   initConwaysGameOfLife(color(255,255,255), color(0), 10);  
 }
 
@@ -154,8 +160,6 @@ int countNeighbors(int x, int y)
      }
    }
   } 
-  if(neighbors > 0)
-    println("<" + x + "," + y + ">" + "has " + neighbors + " neighbors");
   return neighbors;
 }
 
@@ -175,22 +179,66 @@ void mouseClicked()
 {
   if(paused)
   {
-    int xCellOver = int(map(mouseX, 0, boardWidth, 0, boardWidth/cell_w));
-    xCellOver = constrain(xCellOver, 0, boardWidth/cell_w-1);
-    int yCellOver = int(map(mouseY, 0, boardHeight, 0, boardHeight/cell_h));
-    yCellOver = constrain(yCellOver, 0, boardHeight/cell_h-1);
-
-    if (grid[xCellOver][yCellOver].col == alive) 
-    { 
-      buffer[xCellOver][yCellOver] = 0;
-      grid[xCellOver][yCellOver].col = dead; // Kill
-      grid[xCellOver][yCellOver].display();
+    if(mouseY > boardHeight)
+    {
+      for(int i = 0; i < rBtns.length; i++)
+      {
+        if(rBtns[i].isInButton(mouseX, mouseY))
+        {
+          rBtns[i].checked = !rBtns[i].checked;
+          if(rBtns[i].checked)
+            selected = rBtns[i].text;
+          else
+            selected = "";
+          for(int j =0; j < rBtns.length; j++)
+          {
+            if(rBtns[j] != rBtns[i])
+              rBtns[j].checked = false;
+          }
+        }
+        rBtns[i].display();
+      }
     }
-    else 
-    { 
-      buffer[xCellOver][yCellOver] = 1;
-      grid[xCellOver][yCellOver].col = alive;
-      grid[xCellOver][yCellOver].display();
+    else
+    {
+      int xCellOver = int(map(mouseX, 0, boardWidth, 0, boardWidth/cell_w));
+      xCellOver = constrain(xCellOver, 0, boardWidth/cell_w-1);
+      int yCellOver = int(map(mouseY, 0, boardHeight, 0, boardHeight/cell_h));
+      yCellOver = constrain(yCellOver, 0, boardHeight/cell_h-1);
+  
+      if(selected.equals(""))
+      {
+        if (grid[xCellOver][yCellOver].col == alive) 
+        { 
+          buffer[xCellOver][yCellOver] = 0;
+          grid[xCellOver][yCellOver].col = dead; // Kill
+          grid[xCellOver][yCellOver].display();
+        }
+        else 
+        { 
+          buffer[xCellOver][yCellOver] = 1;
+          grid[xCellOver][yCellOver].col = alive;
+          grid[xCellOver][yCellOver].display();
+        }
+
+      }
+      else
+      {
+        Organism org = null;
+        buffer[xCellOver][yCellOver] = 0;
+        grid[xCellOver][yCellOver].col = dead;
+        grid[xCellOver][yCellOver].display();
+        
+        if(selected.equals("Glider"))
+          org = Glider(xCellOver, yCellOver);
+       
+        for(int i = 0; i < org.cells.size(); i++)
+        {
+          buffer[org.cells.get(i).x][org.cells.get(i).y] = 1;
+          grid[org.cells.get(i).x][org.cells.get(i).y].col = alive;
+          grid[org.cells.get(i).x][org.cells.get(i).y].display();
+        }
+      }
     }
   } 
 }
@@ -204,4 +252,35 @@ void clearGrid()
       buffer[i][j] = 0;
     }
   }
+}
+
+void loadButtons(RadioButton[] btns)
+{
+  int currX = RadioButton.size;
+  int currY = boardHeight + 20;
+  
+  for(int i = 0; i < btns.length; i++)
+  {
+    if(currY > height)
+    {
+      currY = boardHeight + 10;
+      currX = currX + RadioButton.size + 100;  //Need text length to make better.
+    }
+    btns[i].x = currX;
+    btns[i].y = currY;
+    currY = currY + RadioButton.size + 10;
+    btns[i].textColor = color(255);
+    btns[i].display();
+  }
+}
+
+Organism Glider(int x, int y)
+{
+  Organism glider = new Organism(x, y);
+  glider.cells.add(new Cell(x, y, cell_w, cell_h, alive));
+  glider.cells.add(new Cell(x+1, y+1, cell_w, cell_h, alive)); 
+  glider.cells.add(new Cell(x+2, y+1, cell_w, cell_h, alive));
+  glider.cells.add(new Cell(x+2, y-1, cell_w, cell_h, alive));
+  glider.cells.add(new Cell(x+2, y, cell_w, cell_h, alive));
+  return glider;
 }

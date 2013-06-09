@@ -4,10 +4,15 @@ class RadioButton
   color edgeColor = color(137, 135, 134);
   color baseColor = color (239, 239, 239);
   color checkColor = color (60, 60, 60);
+  color textColor = color(0);
   int x, y;
   boolean checked;
   String text;
   
+  RadioButton(String txt)
+  {
+    this(-1, -1, txt);
+  }
   RadioButton(int xLoc, int yLoc, String txt)
   {
     this(xLoc, yLoc, txt, false);
@@ -33,7 +38,7 @@ class RadioButton
       ellipse(x, y, size/2, size/2);
     }  
     
-    fill(0);
+    fill(textColor);
     text(text, x + size + 5, y + 5);
   }
   
