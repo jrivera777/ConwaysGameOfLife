@@ -152,14 +152,13 @@ int countNeighbors(int x, int y)
   {
    for (int yy=y-1; yy<=y+1;yy++) 
    {  
-     if (((xx>=0)&&(xx<cols))&&((yy>=0)&&(yy<rows))) 
-     { 
-       if (!((xx==x)&&(yy==y)))  
+     if (!((xx==x)&&(yy==y)))  
        { 
-         if (grid[xx][yy].col == alive)
+         int tx = xx < 0 ? cols - 1 : xx % cols;
+         int ty = yy < 0 ? rows - 1 : yy % rows; 
+         if (grid[tx][ty].col == alive)
            neighbors++;
        } 
-     }
    }
   } 
   return neighbors;
@@ -188,7 +187,6 @@ void mouseClicked()
       {
         if(rBtns[i].isInButton(mouseX, mouseY))
         {
-          println("Clicked " + rBtns[i].text);
           rBtns[i].checked = !rBtns[i].checked;
           if(rBtns[i].checked)
             selected = rBtns[i].text;
@@ -198,7 +196,6 @@ void mouseClicked()
           {
             if(j != i)
             {
-              println("Un-checking " + rBtns[j].text);
               rBtns[j].checked = false;
               rBtns[j].display();
             }
@@ -285,7 +282,7 @@ void loadButtons(RadioButton[] btns)
     if(currY > height)
     {
       currY = boardHeight + 10;
-      currX = currX + RadioButton.size + 100;  //Need text length to make better.
+      currX = currX + RadioButton.size + int(textWidth(btns[i].text)) + 15;
     }
     btns[i].x = currX;
     btns[i].y = currY;
@@ -293,6 +290,12 @@ void loadButtons(RadioButton[] btns)
     btns[i].textColor = color(255);
     btns[i].display();
   }
+}
+
+void Error(int x, int y, String msg)
+{
+  fill(255, 0, 0);
+  text(msg, x, y);
 }
 
 Organism Glider(int x, int y)
@@ -330,7 +333,7 @@ Organism Beacon(int x, int y)
   beacon.yMax = y+3;
   return beacon;
 }
-
+  
 Organism Toad(int x, int y)
 {
   Organism toad = new Organism(x,y);
@@ -350,8 +353,21 @@ Organism Toad(int x, int y)
   return toad;
 }
 
-void Error(int x, int y, String msg)
+Organism GosperGun(int x, int y)
 {
-  fill(255, 0, 0);
-  text(msg, x, y);
+  Organism gosper = new Organism(x,y);
+  gosper.cells.add(new Cell(x, y, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+1, y, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+2, y, cell_w, cell_h, alive));
+    
+  gosper.cells.add(new Cell(x-1, y+1, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x, y+1, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+1, y+1, cell_w, cell_h, alive));
+  
+  
+  gosper.xMin = x-1;
+  gosper.xMax = x+2;
+  gosper.yMin = y;
+  gosper.yMax = y+1;
+  return gosper;
 }

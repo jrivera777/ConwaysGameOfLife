@@ -25,12 +25,25 @@ class RadioButton
     checked = defChk;
   }
   
+  void displayGradient()
+  {
+    noStroke();
+    float red= red(baseColor);
+    float green= green(baseColor);
+    float blue= blue(baseColor);
+    for (int r = size; r > 0; --r) 
+    {
+      fill(red, green, blue);
+      red -=2;
+      green -=2;
+      blue -=2;
+      ellipse(x, y, r, r);
+    }
+  }
+  
   void display()
   {
-    stroke(edgeColor);
-    fill(baseColor);
-    ellipse(x, y, size, size);
-  
+    displayGradient();
     if(checked)
     {
       noStroke();
