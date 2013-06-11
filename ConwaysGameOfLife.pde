@@ -24,10 +24,12 @@ void setup()
   cell_w = width/cols;
   cell_h = boardHeight/rows;
   
-  rBtns = new RadioButton[3];
+  rBtns = new RadioButton[5];
   rBtns[0] = new RadioButton("Glider");
   rBtns[1] = new RadioButton("Beacon");
   rBtns[2] = new RadioButton("Toad");
+  rBtns[3] = new RadioButton("Gosper Glider Gun");
+  rBtns[4] = new RadioButton("Lightweight Spaceship");
   loadButtons(rBtns);
   initConwaysGameOfLife(color(255,255,255), color(0), 10);  
 }
@@ -241,7 +243,11 @@ void mouseClicked()
           org = Beacon(xCellOver, yCellOver);
         else if(selected.equals("Toad"))
           org = Toad(xCellOver, yCellOver);       
-       
+        else if(selected.equals("Gosper Glider Gun"))
+          org = GosperGun(xCellOver, yCellOver);
+        else if(selected.equals("Lightweight Spaceship"))
+          org = LWSS(xCellOver, yCellOver);
+          
        if(org.xMin < 0 || org.xMax >= cols || org.yMin < 0 || org.yMax >= rows)
        {
          Error(buttonAreaWidth/2, buttonAreaHeight / 2 + boardHeight, "Cannot create organism inbounds.");
@@ -353,21 +359,77 @@ Organism Toad(int x, int y)
   return toad;
 }
 
+Organism LWSS(int x, int y)
+{
+  Organism lwss = new Organism(x,y);
+  lwss.cells.add(new Cell(x, y, cell_w, cell_h, alive));
+  lwss.cells.add(new Cell(x+3, y, cell_w, cell_h, alive));
+  lwss.cells.add(new Cell(x+4, y+1, cell_w, cell_h, alive));
+  lwss.cells.add(new Cell(x+4, y+2, cell_w, cell_h, alive));
+  lwss.cells.add(new Cell(x+4, y+3, cell_w, cell_h, alive));
+  lwss.cells.add(new Cell(x+3, y+3, cell_w, cell_h, alive));
+  lwss.cells.add(new Cell(x+2, y+3, cell_w, cell_h, alive));
+  lwss.cells.add(new Cell(x+1, y+3, cell_w, cell_h, alive));
+  lwss.cells.add(new Cell(x, y+2, cell_w, cell_h, alive));
+  
+  lwss.xMin = x;
+  lwss.xMax = x+4;
+  lwss.yMin = y;
+  lwss.yMax = y+3;
+ 
+  return lwss;
+}
+
 Organism GosperGun(int x, int y)
 {
   Organism gosper = new Organism(x,y);
   gosper.cells.add(new Cell(x, y, cell_w, cell_h, alive));
   gosper.cells.add(new Cell(x+1, y, cell_w, cell_h, alive));
-  gosper.cells.add(new Cell(x+2, y, cell_w, cell_h, alive));
-    
-  gosper.cells.add(new Cell(x-1, y+1, cell_w, cell_h, alive));
-  gosper.cells.add(new Cell(x, y+1, cell_w, cell_h, alive));
   gosper.cells.add(new Cell(x+1, y+1, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x, y+1, cell_w, cell_h, alive));
   
+  gosper.cells.add(new Cell(x+12, y-2, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+13, y-2, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+11, y-1, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+10, y, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+10, y+1, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+10, y+2, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+11, y+3, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+12, y+4, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+13, y+4, cell_w, cell_h, alive));
   
-  gosper.xMin = x-1;
-  gosper.xMax = x+2;
-  gosper.yMin = y;
-  gosper.yMax = y+1;
+  gosper.cells.add(new Cell(x+14, y+1, cell_w, cell_h, alive));
+  
+  gosper.cells.add(new Cell(x+15, y-1, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+15, y+3, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+16, y, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+16, y+1, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+16, y+2, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+17, y+1, cell_w, cell_h, alive));
+  
+  gosper.cells.add(new Cell(x+20, y, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+21, y, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+20, y-1, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+21, y-1, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+20, y-2, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+21, y-2, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+22, y-3, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+22, y+1, cell_w, cell_h, alive));
+  
+  gosper.cells.add(new Cell(x+24, y-3, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+24, y-4, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+24, y+1, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+24, y+2, cell_w, cell_h, alive));
+
+  gosper.cells.add(new Cell(x+34, y-1, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+35, y-1, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+34, y-2, cell_w, cell_h, alive));
+  gosper.cells.add(new Cell(x+35, y-2, cell_w, cell_h, alive));
+    
+  gosper.xMin = x;
+  gosper.xMax = x+35;
+  gosper.yMin = y-4;
+  gosper.yMax = y+4;
+ 
   return gosper;
 }
