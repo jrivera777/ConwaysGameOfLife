@@ -1,6 +1,7 @@
 Cell[][] grid;
 int[][] buffer;
 RadioButton[] rBtns;
+Organism[] orgs;
 int rows, cols;
 int cell_w, cell_h;
 color dead, alive;
@@ -23,6 +24,8 @@ void setup()
   cols = 50;
   cell_w = width/cols;
   cell_h = boardHeight/rows;
+  
+  Organism g = new Organism(0, 0, "glider.csv", cell_w, cell_h, alive);
   
   rBtns = new RadioButton[5];
   rBtns[0] = new RadioButton("Glider");
@@ -306,12 +309,12 @@ void Error(int x, int y, String msg)
 
 Organism Glider(int x, int y)
 {
-  Organism glider = new Organism(x, y);
-  glider.cells.add(new Cell(x, y, cell_w, cell_h, alive));
-  glider.cells.add(new Cell(x+1, y+1, cell_w, cell_h, alive)); 
-  glider.cells.add(new Cell(x+2, y+1, cell_w, cell_h, alive));
-  glider.cells.add(new Cell(x+2, y-1, cell_w, cell_h, alive));
-  glider.cells.add(new Cell(x+2, y, cell_w, cell_h, alive));
+  Organism glider = new Organism(x, y, "glider.csv",cell_w, cell_h, alive);
+//  glider.cells.add(new Cell(x, y, cell_w, cell_h, alive));
+//  glider.cells.add(new Cell(x+1, y+1, cell_w, cell_h, alive)); 
+//  glider.cells.add(new Cell(x+2, y+1, cell_w, cell_h, alive));
+//  glider.cells.add(new Cell(x+2, y-1, cell_w, cell_h, alive));
+//  glider.cells.add(new Cell(x+2, y, cell_w, cell_h, alive));
   
   glider.xMin = x;
   glider.xMax = x+2;
