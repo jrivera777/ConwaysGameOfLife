@@ -1,10 +1,10 @@
 class Cell 
 {
-  int x,y;   
-  int w,h;   
+  float x, y;   
+  float w, h;   
   color col;     
-  
-  Cell(int tempX, int tempY, int tempW, int tempH, color tempC) 
+
+  Cell(float tempX, float tempY, float tempW, float tempH, color tempC) 
   {
     x = tempX;
     y = tempY;
@@ -12,11 +12,12 @@ class Cell
     h = tempH;
     col = tempC;
   }
-  
+
   void display() 
   {
     fill(col);
     stroke(200);
-    rect(x,y,w,h);
+    rect(x, y, w, h);
   }
 }
+
