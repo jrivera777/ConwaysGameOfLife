@@ -8,9 +8,9 @@ class RadioButton
   float x, y;
   boolean checked;
   String text;
-
+ 
   RadioButton(String txt)
-  {
+  { 
     this(-1, -1, txt);
   }
   RadioButton(float xLoc, float yLoc, String txt)
@@ -32,9 +32,9 @@ class RadioButton
     float green= green(baseColor);
     float blue= blue(baseColor);
     for (int r = size; r > 0; --r) 
-    {
+    { 
       fill(red, green, blue);
-      red -=2;
+      red -=2; 
       green -=2;
       blue -=2;
       ellipse(x, y, r, r);

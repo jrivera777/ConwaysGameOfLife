@@ -35,7 +35,6 @@ void setup()
   cell_w = width / (float)cols;
   cell_h = boardHeight / rows;
 
-  textSize(12);
 
   printDebug("Cell width = " + cell_w);
   printDebug("Cell height = " + cell_h); 
@@ -46,12 +45,13 @@ void setup()
   rBtns[2] = new RadioButton("Toad");
   rBtns[3] = new RadioButton("Gosper Glider Gun");
   rBtns[4] = new RadioButton("Lightweight Spaceship");
-  loadButtons(rBtns);
+  drawButtons(rBtns);
   initConwaysGameOfLife(color(255, 255, 255), color(0), 10);
 }
 
 void draw()
 {
+  drawButtons(rBtns);
   for (int i = 0; i < cols; i++ ) 
   {     
     for (int j = 0; j < rows; j++ ) 
@@ -67,7 +67,6 @@ void draw()
     {
       applyRules();
       lastTime = millis();
-      loadButtons(rBtns);
     }
   }
 }
@@ -202,7 +201,7 @@ void keyPressed()
 
 void mouseClicked()
 {
-  loadButtons(rBtns); 
+  drawButtons(rBtns); 
   if (paused)
   {
     if (mouseY > boardHeight)
@@ -300,18 +299,18 @@ void clearGrid()
   }
 }
 
-void loadButtons(RadioButton[] btns)
+void drawButtons(RadioButton[] btns)
 {
   float currX = RadioButton.size;
   float currY = boardHeight + 20;
-  fill(50);
-  rect(0, boardHeight, boardWidth, buttonAreaHeight);
+  fill(20);
+  rect(-1, boardHeight, boardWidth, buttonAreaHeight+1);
 
   for (int i = 0; i < btns.length; i++)
   {
-    if (currY > height)
+    if (currY >= height)
     {
-      currY = boardHeight + 10;
+      currY = boardHeight + 20;
       currX = currX + RadioButton.size + int(textWidth(btns[i].text)) + 15;
     }
     btns[i].x = currX;
@@ -324,10 +323,8 @@ void loadButtons(RadioButton[] btns)
 
 void Error(float x, float y, String msg)
 {
-  textSize(16);
   fill(255, 0, 0);
   text(msg, x, y);
-  textSize(12);
 }
 
 Organism Glider(int x, int y)
